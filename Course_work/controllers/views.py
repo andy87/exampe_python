@@ -6,7 +6,7 @@ from Course_work.components.data_base import *
 
 
 def home(request):
-    airports = data_base_load("JSON/airports.json", 'rb')
+    airports = data_base_load("JSON/airports.json")
     len_air = len(airports['airports'])
     num_cell = len_air + (len_air % 3)
     if len_air % 3 == 0:
@@ -45,7 +45,7 @@ def login(request):
         return redirect("/error")
 
     if request.POST:
-        users = data_base_load("JSON/users.json", 'rb')
+        users = data_base_load("JSON/users.json")
         req = request.POST
         # Проверка входа в систему
         Login = req.get("login")

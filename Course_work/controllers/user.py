@@ -14,7 +14,7 @@ def add_user(request):
 
     elif request.POST:
 
-        users = data_base_load("JSON/users.json", 'rb')
+        users = data_base_load("JSON/users.json")
 
         req = request.POST
         Login = req.get("login")
@@ -55,7 +55,7 @@ def add_mod(request):
     if 'id' not in request.session:
         return redirect("/error")
     elif request.POST:
-        users = data_base_load("JSON/users.json", 'rb')
+        users = data_base_load("JSON/users.json")
         req = request.POST
         Login = req.get("login")
         Pass = req.get("password")
@@ -88,7 +88,7 @@ def list_del_user(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
+        users = data_base_load("JSON/users.json")
         data = users['users']
     return render(request, "user/del_user.html", {'data': data})
 
@@ -96,7 +96,7 @@ def list_del_user(request):
 def del_user1(request, user_id):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
-    users = data_base_load("JSON/users.json", 'encoding="utf-8"')
+    users = data_base_load("JSON/users.json")
     users['users'][int(user_id) - 1]['status'] = 'false'
 
     data_base_update('JSON/users.json', users)
@@ -108,7 +108,7 @@ def moderator_list(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
+        users = data_base_load("JSON/users.json")
         data = users['users']
 
     return render(request, "user/moderator_list.html", {
@@ -120,7 +120,7 @@ def user_list(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
+        users = data_base_load("JSON/users.json")
         data = users['users']
     return render(request, "user/user_list.html", {
         'data': data

@@ -15,10 +15,7 @@ Including another URLconf
 """
 
 from django.conf.urls import url
-from .controllers import account, views
-from .controllers import airtort
-from .controllers import order
-from .controllers import user
+from .controllers import account, views, airtort, order, user
 from django.contrib import admin
 
 urlpatterns = [
