@@ -1,15 +1,11 @@
-from django.http import Http404
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
-from ..forms import *
-from django.views.decorators.csrf import csrf_exempt
 
-import json
+from Course_work.components.forms import *
+from Course_work.components.data_base import *
 
 
 def add_user(request):
-
     AddForm = AddUser(request.POST or None)
     error = 'None'
 
@@ -18,8 +14,8 @@ def add_user(request):
 
     elif request.POST:
 
-        with open("JSON/users.json", 'rb') as read_file_json:
-            users = json.load(read_file_json)
+        users = data_base_load("JSON/users.json", 'rb')
+
         req = request.POST
         Login = req.get("login")
         Pass = req.get("password")
@@ -37,8 +33,7 @@ def add_user(request):
                 "status": "true"
             })
 
-            with open('JSON/users.json', 'w', encoding='utf-8') as read_file_json:
-                read_file_json.write(json.dumps(users, ensure_ascii=False, separators=(',', ': '), indent=2))
+            data_base_update('JSON/users.json', users)
 
             request.session.set_expiry(86400)
             request.session['id'] = users['users'][-1]['id']
@@ -50,7 +45,7 @@ def add_user(request):
 
     return render(request, "user/add_user.html", {
         'form': AddForm,
-         'error': error
+        'error': error
     })
 
 
@@ -60,8 +55,7 @@ def add_mod(request):
     if 'id' not in request.session:
         return redirect("/error")
     elif request.POST:
-        with open("JSON/users.json", 'rb') as read_file_json:
-            users = json.load(read_file_json)
+        users = data_base_load("JSON/users.json", 'rb')
         req = request.POST
         Login = req.get("login")
         Pass = req.get("password")
@@ -79,8 +73,8 @@ def add_mod(request):
                 "status": "true"
             })
 
-            with open('JSON/users.json', 'w', encoding='utf-8') as read_file_json:
-                read_file_json.write(json.dumps(users, ensure_ascii=False, separators=(',', ': '), indent=2))
+            data_base_update('JSON/users.json', users)
+
             request.session.set_expiry(86400)
             return redirect("/moderator_list")
 
@@ -90,49 +84,43 @@ def add_mod(request):
     })
 
 
-
 def list_del_user(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        with open("JSON/users.json", encoding='utf-8') as read_file_json:
-            users = json.load(read_file_json)
+        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
         data = users['users']
     return render(request, "user/del_user.html", {'data': data})
-
 
 
 def del_user1(request, user_id):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
-    with open("JSON/users.json", encoding='utf-8') as read_file_json:
-        users = json.load(read_file_json)
+    users = data_base_load("JSON/users.json", 'encoding="utf-8"')
     users['users'][int(user_id) - 1]['status'] = 'false'
-    with open('JSON/users.json', 'w', encoding='utf-8') as read_file_json:
-        read_file_json.write(json.dumps(users, ensure_ascii=False, separators=(',', ': '), indent=2))
-    return redirect("/list_del_user")
 
+    data_base_update('JSON/users.json', users)
+
+    return redirect("/list_del_user")
 
 
 def moderator_list(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        with open("JSON/users.json", encoding='utf-8') as read_file_json:
-            users = json.load(read_file_json)
+        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
         data = users['users']
+
     return render(request, "user/moderator_list.html", {
         'data': data
     })
-
 
 
 def user_list(request):
     if "id" not in request.session or request.session['status'] == 'false':
         return redirect("/error")
     else:
-        with open("JSON/users.json", encoding='utf-8') as read_file_json:
-            users = json.load(read_file_json)
+        users = data_base_load("JSON/users.json", 'encoding="utf-8"')
         data = users['users']
     return render(request, "user/user_list.html", {
         'data': data
