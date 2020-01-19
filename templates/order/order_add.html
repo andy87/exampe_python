@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>
+    Покупка билета
+</title>
+</head>
+<link href="../../static/style.css" type="text/css" rel="stylesheet">
+<header>
+<img src="../../static/airling1.png">
+<h1>
+    Покупка билета
+</h1>
+</header>
+<body>
+<div class="table">
+ <form action="/add_user/" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><input type="submit" value="Купить"/></br>
+    </form>
+    </div>
+<button>
+    <a href="/">
+        Назад
+    </a>
+</button>
+</body>
+</html>
