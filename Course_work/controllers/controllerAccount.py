@@ -20,6 +20,19 @@ def account(request):
 
     return render(request, page, {})
 
+def index(request):
+
+    position = request.session['position']
+
+    page = "account/account.html"
+
+    if not success(request):
+        page = "error_404"
+
+    return render(request, page, {
+        'position' : position
+    })
+
 
 def success(request):
     resp = ("id" not in request.session or request.session['status'] == 'false')
