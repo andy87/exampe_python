@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'del_user/(?P<user_id>\d+)', controllerUser.del_user1, name='del_user1'),
 
     # order
-    url(r'order/add/', controllerOrder.order_add, name='order_add'),
+    url(r'order/add/', controllerOrder.add_order, name='order_add'),
 
     # airtort
     url(r'airport/(?P<air_id>\d+)', controllerAirtort.air_detail, name='air_detail_url'),

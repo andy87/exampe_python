@@ -15,7 +15,7 @@ class ModelUser(ModelCommon):
         Login = req.get("login")
         Pass = req.get("password")
 
-        json = data_base_load(self.DATA_BASE)
+        json = self.data_base_load()
 
         if (Login in json['users']):
             resp = {
@@ -34,14 +34,9 @@ class ModelUser(ModelCommon):
 
             data_base_update(self.DATA_BASE, json)
 
-            session = request.session
             user = json['users'][-1]
 
-            session.set_expiry(86400)
-            session['id'] = user['id']
-            session['login'] = user['login']
-            session['position'] = user['position']
-            session['status'] = user['status']
+            self.update_session(self, request, user)
 
             resp = {
                 'status': self.OK,
@@ -50,3 +45,32 @@ class ModelUser(ModelCommon):
 
         return resp
 
+
+
+    def Authorize(self, request):
+        JSON = self.data_base_load()
+        users = JSON['users']
+        req = request.POST
+        # Проверка входа в систему
+        Login = req.get("login")
+        Pass = req.get("password")
+        error = 'Неправильно введён логин или пароль'
+        #       checkFunc = "none"
+
+        for user in users:
+            if user['login'] == Login and user['password'] == Pass:
+                self.update_session(self, request, user)
+                return True
+
+        return False
+
+
+
+    def update_session(self, request, user):
+        session = request.session
+
+        session.set_expiry(86400)
+        session['id'] = user['id']
+        session['login'] = user['login']
+        session['position'] = user['position']
+        session['status'] = user['status']

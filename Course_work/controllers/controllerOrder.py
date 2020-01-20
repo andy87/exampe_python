@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+from Course_work.models.ModelOrder import *
 
-def order_add(request):
-    return render(request, "order/order_add.html")
+
+
+def add_order(request):
+    return render(request, ModelOrder.PAGE_ADD)
